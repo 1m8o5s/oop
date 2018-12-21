@@ -1,0 +1,143 @@
+#pragma once
+#include "data_time_definition.h"
+void DataTime::setSecond(int sec) {
+	this->second = sec;
+}
+void DataTime::setMinute(int min) {
+	this->minute = min;
+}
+void DataTime::setHour(int hour) {
+	this->hour = hour;
+}
+void DataTime::setDay(int day) {
+	this->day = day;
+}
+void DataTime::setMounth(int mounth) {
+	this->mounth = mounth;
+}
+void DataTime::setYear(int year) {
+	this->year = year;
+}
+int DataTime::getSecond() {
+	return second;
+}
+int DataTime::getMinute() {
+	return minute;
+}
+int DataTime::getHour() {
+	return hour;
+}
+int DataTime::getDay() {
+	return day;
+}
+int DataTime::getMounth() {
+	return mounth;
+}
+int DataTime::getYear() {
+	return year;
+}
+DataTime DataTime::operator++(int) {
+	DataTime dt = *this;
+	dt.tick(0);
+	++*this;
+	return dt;
+}
+DataTime& DataTime::operator++() {
+	tick(0);
+	return *this;
+}
+DataTime DataTime::operator--(int) {
+	DataTime dt = *this;
+	dt.tick(0);
+	++*this;
+	return dt;
+}
+DataTime& DataTime::operator--() {
+	tick(0);
+	return *this;
+}
+DataTime DataTime::operator+(int seconds) {
+	DataTime dt;
+	for (int i = 0; i < seconds; i++) {
+		dt.tick(0);
+	}
+	return dt;
+}
+DataTime DataTime::operator-(int seconds) {
+	DataTime dt;
+	for (int i = 0; i < seconds; i++) {
+		dt.tick(0);
+	}
+	return dt;
+}
+DataTime DataTime::operator*(int seconds) {
+	DataTime dt;
+	for (int i = 0; i < seconds; i++) {
+		for (int j = 0; j < seconds; j++) {
+			dt.tick(0);
+		}
+	}
+	return dt;
+}
+DataTime& DataTime::operator = (DataTime& dt) {
+	this->setSecond(dt.getSecond());
+	this->setMinute(dt.getMinute());
+	this->setHour(dt.getHour());
+	this->setDay(dt.getDay());
+	this->setMounth(dt.getMounth());
+	this->setYear(dt.getYear());
+}
+DataTime& DataTime::operator += (int seconds) {
+	for (int i = 0; i < seconds; i++) {
+		tick(0);
+	}
+}
+DataTime& DataTime::operator -= (int seconds) {
+	for (int i = 0; i < seconds; i++) {
+		tick(0);
+	}
+}
+DataTime& DataTime::operator *= (int seconds) {
+	for (int i = 0; i < seconds; i++) {
+		for (int j = 0; j < seconds; j++) {
+			tick(0);
+		}
+	}
+}
+int DataTime::operator[](int n) {
+	switch (n) {
+	case 0:
+		return this->getSecond();
+	case 1:
+		return this->getMinute();
+	case 2:
+		return this->getHour();
+	case 3:
+		return this->getDay();
+	case 4:
+		return this->getMounth();
+	case 5:
+		return this->getYear();
+	}
+}
+void DataTime::tick(int target) {
+	setSecond(getSecond() + (target == 0));
+	setMinute(getMinute() + (target <= 1)*(second == 60));
+	setSecond(getSecond() % 60);
+	setHour(getHour() + (target <= 2)*(minute == 60));
+	setMinute(getMinute() % 60);
+	setDay(getDay() + (target <= 3)*(hour == 24));
+	setHour(getHour() % 24);
+	setMounth(getMounth() + (target <= 4)*(day == 30));
+	setDay(getDay() % 30);
+	setYear(getYear() + (target <= 5)*(mounth == 12));
+	setMounth(getMounth() % 12);
+}
+DataTime::DataTime():second(0), minute(0),hour(0),day(0), mounth(0), year(0) {
+
+}
+DataTime::DataTime(int sec, int min, int hour, int day, int mounth, int year)
+					:second(sec), minute(min), hour(hour), day(day), mounth(mounth), year(year)
+{
+
+}
